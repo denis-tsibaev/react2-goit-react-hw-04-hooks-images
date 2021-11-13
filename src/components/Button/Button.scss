@@ -1,0 +1,19 @@
+$all: all 0.5s ease;
+
+.btnLoadMore {
+    background: #2f4ad0;
+    margin: 16px 0 20px 0;
+    padding: 8px 16px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 8px 6px -6px #555;
+    transition: $all;
+
+    &:hover {
+        letter-spacing: 2px;
+        box-shadow: none;
+        transition: $all;
+    }
+}
