@@ -17,11 +17,9 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const option = { query, currentPage };
-
     useEffect(() => {
         fetchImg();
-    });
+    }, [query, currentPage]);
 
     const handleInputChange = query => {
         setQuery(query.trim());
@@ -34,10 +32,9 @@ export default function App() {
 
         setIsLoading(true);
 
-        imageApi(option)
+        imageApi({ query, currentPage })
             .then(result => {
-                setHits(prevState => [...prevState.hits, ...mapper(result)]);
-                setCurrentPage(currentPage + 1);
+                setHits(prevState => [...prevState, ...mapper(result)]);
 
                 window.scrollTo({
                     top: document.documentElement.scrollHeight,
@@ -51,12 +48,13 @@ export default function App() {
     };
 
     const loadMore = () => {
-        let currentPage = currentPage;
-        currentPage += 1;
-        setCurrentPage(currentPage);
+        let page = currentPage;
+        page += 1;
+        setCurrentPage(page);
     };
 
     const handleModalOpen = largeImage => {
+        window.addEventListener('keydown', handleModalEscape);
         setModal(true);
         setModalImage(largeImage);
     };
@@ -72,7 +70,7 @@ export default function App() {
     const resetModal = () => {
         setModal(false);
         setModalImage('');
-        window.removeEventListener('keydown', this.handleModalEscape);
+        window.removeEventListener('keydown', handleModalEscape);
     };
 
     return (
@@ -91,9 +89,8 @@ export default function App() {
 
             {modal && (
                 <Modal
-                    modalClose={handleModalEscape}
                     handleBackdropClick={handleBackdropClick}
-                    setModalImage={setModalImage}
+                    modalImage={modalImage}
                 />
             )}
         </Container>

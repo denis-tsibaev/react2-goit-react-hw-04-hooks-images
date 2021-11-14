@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import '../../styles.css';
 
@@ -35,6 +35,10 @@ export default function Searchbar({ onSubmit }) {
         </header>
     );
 }
+
+Searchbar.propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+};
 
 // export default class Searchbar extends Component {
 //     state = {
