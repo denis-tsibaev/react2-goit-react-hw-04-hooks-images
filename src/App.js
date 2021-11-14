@@ -13,19 +13,18 @@ export default function App() {
     const [hits, setHits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [modal, setModal] = useState(false);
-    const [modalImage, setModalImage] = useState('');
+    const [modalImage, setModalImage] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const option = { query, currentPage };
 
     useEffect(() => {
-        fetchImg(option);
-    }, [option]);
+        fetchImg();
+    });
 
     const handleInputChange = query => {
-        setQuery(query);
-        // setQuery(query.trim());
+        setQuery(query.trim());
         setCurrentPage(1);
         setHits([]);
     };
@@ -37,9 +36,8 @@ export default function App() {
 
         imageApi(option)
             .then(result => {
-                setHits(prevState => ({
-                    hits: [...prevState.hits, ...mapper(result)],
-                }));
+                setHits(prevState => [...prevState.hits, ...mapper(result)]);
+                setCurrentPage(currentPage + 1);
 
                 window.scrollTo({
                     top: document.documentElement.scrollHeight,
@@ -80,6 +78,7 @@ export default function App() {
     return (
         <Container>
             <Searchbar onSubmit={handleInputChange} />
+
             {query && (
                 <ImageGallery hits={hits} onImageClick={handleModalOpen} />
             )}
@@ -94,9 +93,8 @@ export default function App() {
                 <Modal
                     modalClose={handleModalEscape}
                     handleBackdropClick={handleBackdropClick}
-                >
-                    <img src={modalImage} alt="" />
-                </Modal>
+                    setModalImage={setModalImage}
+                />
             )}
         </Container>
     );

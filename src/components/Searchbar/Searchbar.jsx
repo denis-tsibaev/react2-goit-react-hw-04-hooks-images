@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import '../../styles.css';
 
-export default function Searchbar(props) {
+export default function Searchbar({ onSubmit }) {
     const [query, setQuery] = useState('');
 
     const handleChange = e => {
@@ -11,7 +11,7 @@ export default function Searchbar(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        this.props.onSubmit(query);
+        onSubmit(query);
         setQuery('');
     };
 
