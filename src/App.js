@@ -17,15 +17,15 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        fetchImg();
-    }, [query, currentPage]);
-
     const handleInputChange = query => {
         setQuery(query.trim());
         setCurrentPage(1);
         setHits([]);
     };
+
+    useEffect(() => {
+        fetchImg();
+    }, [query, currentPage]);
 
     const fetchImg = () => {
         if (!query) return;
@@ -48,29 +48,17 @@ export default function App() {
     };
 
     const loadMore = () => {
-        let page = currentPage;
-        page += 1;
-        setCurrentPage(page);
+        setCurrentPage(prevPage => prevPage + 1);
     };
 
     const handleModalOpen = largeImage => {
-        window.addEventListener('keydown', handleModalEscape);
         setModal(true);
         setModalImage(largeImage);
-    };
-
-    const handleModalEscape = e => {
-        if (e.keyCode === 27) resetModal();
-    };
-
-    const handleBackdropClick = e => {
-        if (e.target === e.currentTarget) resetModal();
     };
 
     const resetModal = () => {
         setModal(false);
         setModalImage('');
-        window.removeEventListener('keydown', handleModalEscape);
     };
 
     return (
@@ -87,12 +75,7 @@ export default function App() {
                 <Button onLoadClick={loadMore} text="Load more" />
             )}
 
-            {modal && (
-                <Modal
-                    handleBackdropClick={handleBackdropClick}
-                    modalImage={modalImage}
-                />
-            )}
+            {modal && <Modal onClose={resetModal} modalImage={modalImage} />}
         </Container>
     );
 }
